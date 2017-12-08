@@ -1,27 +1,21 @@
-#!D:\Surya\copy-clipboard\venv\Scripts\python.exe
+#!${workspace}\venv\Scripts\python.exe
 
 from sys import argv
 from pathlib import Path
 import os
 import json
 
-FILE = os.getcwd()+"\\newfile"
+FILE = os.getcwd()+"\\store"
 print(FILE)
 
 def addCred():
-    #Check weather the file exists or create new
-    # with open('newfile','a') as f:
-    #     f.write("second line")
-    # Take input(key)
-    # Take input(value)
-    # encrypt the value
-    # store the key value pair in file
     if not os.path.isfile(FILE):
         print("file not exists")
         print("Please enter the host name, password separated by space and type DONE at last:")
         cred_obj = {}
         while True:
             input_value = input()
+            #TODO: input validation
             if input_value.upper() == "DONE":
                 break
             else:
@@ -31,14 +25,56 @@ def addCred():
         print(cred_obj)
         with open(FILE,'w') as f:
             f.write(json.dumps(cred_obj))
+        
+        print("Added credential successful")
+        
     else:
         print("file exists")
         with open(FILE,'r') as f:
             data = f.read()
-        print(json.loads(data))
+
+        if not data:
+            data = {}
+            with open(FILE,'w') as f:
+                f.write(json.dumps(data)) 
+        data = json.loads(data)
+        print("Please enter the host name, password separated by space and type DONE at last:")
+        while True:
+            input_value = input()
+            if input_value.upper() == "DONE":
+                break
+            else:
+                input_host = input_value.split()
+                data[input_host[0]] = input_host[1]
+
+        with open(FILE,'w') as f:
+            f.write(json.dumps(data))
+        print("Added credential successful")
 
 def getCred():
-    pass
+    if not os.path.isfile(FILE):
+        print("It seems file doesn't exist. Please start program\
+            using 'new' argument add a credential.")
+    else:
+        with open(FILE,'r') as f:
+            data = f.read()
+
+        if not data:
+            print("It seems there are no credentials. Please add \
+                credentials and run the program")
+        else:
+            data_dict = json.loads(data)
+            print("\nAvailable credentials")
+            print("-------"*3)            
+            print(*[k for k in data_dict.keys()], sep='\n')
+            print("-------"*3)
+            name = input("please enter the server for which you want the password:")
+
+            if name not in data_dict.keys():
+                print("The entered details is not available")
+            else:
+                #copy to clipboard.
+                pass
 
 if __name__ == '__main__':
     if len(argv) > 1:
@@ -47,4 +83,4 @@ if __name__ == '__main__':
         else:
             print("wrong arguments")
     else:
-        print("not new")
+        getCred()
