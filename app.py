@@ -1,9 +1,11 @@
-#!${workspace}\venv\Scripts\python.exe
+#!D:\Surya\copy-clipboard\venv\Scripts\python.exe
 
 from sys import argv
-from pathlib import Path
+import pyperclip
+# from pathlib import Path
 import os
 import json
+import pyperclip
 
 FILE = os.getcwd()+"\\store"
 print(FILE)
@@ -20,13 +22,15 @@ def addCred():
                 break
             else:
                 input_host = input_value.split()
+                if len(input_host) != 2:
+                    print("Invalid input. exit the program")
+                    quit()
                 cred_obj[input_host[0]] = input_host[1]
-        
-        print(cred_obj)
+
         with open(FILE,'w') as f:
             f.write(json.dumps(cred_obj))
         
-        print("Added credential successful")
+        print("Added credential successfully")
         
     else:
         print("file exists")
@@ -45,11 +49,14 @@ def addCred():
                 break
             else:
                 input_host = input_value.split()
+                if len(input_host) != 2:
+                    print("Invalid input. exit the program")
+                    quit()
                 data[input_host[0]] = input_host[1]
 
         with open(FILE,'w') as f:
             f.write(json.dumps(data))
-        print("Added credential successful")
+        print("Added credential successfully")
 
 def getCred():
     if not os.path.isfile(FILE):
@@ -71,10 +78,15 @@ def getCred():
             name = input("please enter the server for which you want the password:")
 
             if name not in data_dict.keys():
-                print("The entered details is not available")
+                print("\n======="*3)
+                print("The password of entered key is not available")
+                print("======="*3)
+                
             else:
                 #copy to clipboard.
-                pass
+                result = data_dict[name]
+                pyperclip.copy(result)
+                print("Password copied to clipboard")
 
 if __name__ == '__main__':
     if len(argv) > 1:
@@ -84,3 +96,8 @@ if __name__ == '__main__':
             print("wrong arguments")
     else:
         getCred()
+        while True:
+            print("\npress 'q' to quit or enter to continue")
+            if input() == 'q':
+                quit()
+            getCred()
