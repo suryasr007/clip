@@ -11,12 +11,10 @@ FILE = "store"
 
 def encoded(data):
     encoded_data = base64.b64encode(bytes(data, 'utf-8'))
-    print(encoded_data.decode())
     return encoded_data.decode()
 
 def decoded(encoded_data):
     decoded_data = base64.b64decode(encoded_data)
-    print(decoded_data.decode())
     return decoded_data.decode()
 
 
