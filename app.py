@@ -35,15 +35,17 @@ def addCred():
             if input_value.upper() == "DONE":
                 break
             else:
-                input_host = input_value.split()
-                if len(input_host) != 2:
-                    print("Invalid input. exit the program")
-                    quit()
-                cred_obj[input_host[0]] = encoded(input_host[1])
+                credentials = input_value.split()
+                if len(credentials) < 2:
+                    print("Invalid Input exiting the program")
+                    break
+                else:
+                    servername = " ".join(credentials[:(len(credentials)-1)])
+                    password = encoded(credentials[-1])
+                    cred_obj[servername] = password
 
         with open(FILE,'w') as f:
             f.write(json.dumps(cred_obj))
-        
         print("Added credential successfully")
         
     else:
@@ -64,11 +66,14 @@ def addCred():
             if input_value.upper() == "DONE":
                 break
             else:
-                input_host = input_value.split()
-                if len(input_host) != 2:
-                    print("Invalid input. exiting the program")
-                    quit()
-                data[input_host[0]] = encoded(input_host[1])
+                credentials = input_value.split()
+                if len(credentials) < 2:
+                    print("Invalid Input exiting the program")
+                    break
+                else:
+                    servername = " ".join(credentials[:(len(credentials)-1)])
+                    password = encoded(credentials[-1])
+                    data[servername] = password
 
         with open(FILE,'w') as f:
             f.write(json.dumps(data))
